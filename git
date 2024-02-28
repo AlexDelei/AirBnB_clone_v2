@@ -24,6 +24,11 @@ files_not_found=()
 BLUE='\033[0;34m'
 RED='\033[0;31m'
 NONE='\033[0m'
+commit_hash=$(git rev-parse HEAD)
+commit_author=$(git show -s --format='%an'"$commit_hash")
+commit_date=$(git show -s --format='%cd' --date=format:'%Y-%m-%d %H:%M' "$commit_hash")
+change_details=$(git show --stat "$commit_hash")
+deltas_details=$(git show --details "$commit_hash")
 for ((i = 1; i <= $# - 1; i ++)); do
 	file="${!i}"
 
@@ -45,6 +50,11 @@ if [ "${#files_not_found[@]}" -gt 0 ]; then
 else
 	git commit -m "$commit_msg"
 	echo -e "${BLUE}Committed changes with message: '$commit_msg'${NONE}"
-	git push
+	echo "Commit Hash ->  $commit_hash"
+	echo "Author ->  $commit_author"
+	echo "Date ->  $commit_date"
+	echo "Changes ->  $change_details"
+	echo "Deltas ->  $deltas_details"
+	git push origin master
 	exit 1
 fi
