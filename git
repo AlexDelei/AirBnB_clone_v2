@@ -20,7 +20,7 @@ fi
 # Looping through the provided files and adding them to the index
 
 # color code for a warning message
-
+files_not_found=()
 BLUE='\033[0;34m'
 RED='\033[0;31m'
 NONE='\033[0m'
@@ -33,9 +33,18 @@ for ((i = 1; i <= $# - 1; i ++)); do
 	elif [ -e "$file" ]; then
 		git add "$file"
 	else
-		echo -e "${RED}Warning:${NONE} File '$file' not found, skipping."
+		files_not_found+=("$file")
 	fi
 done
-git commit -m "$commit_msg"
-echo -e "${BLUE}Committed changes with message: '$commit_msg'${NONE}"
-git push
+if [ "${#files_not_found[@]}" -gt 0 ]; then
+	echo -e "${RED} Files not found: ${NONE}"
+	for fnf in "${files_not_found[@]}"; do
+		echo "  $fnf"
+	done
+	exit 1
+else
+	git commit -m "$commit_msg"
+	echo -e "${BLUE}Committed changes with message: '$commit_msg'${NONE}"
+	git push
+	exit 1
+fi
