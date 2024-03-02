@@ -2,6 +2,9 @@
 """ Console Module """
 import cmd
 import sys
+import models
+import importlib
+import os
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -29,6 +32,7 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
+    storage_type = os.environ.get('HBNB_STORAGE_TYPE', 'file')
 
     def preloop(self):
         """Prints if isatty is false"""
@@ -113,18 +117,55 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, args):
-        """ Create an object of any class"""
-        if not args:
+    def do_create(self, arg):
+        """
+        Create an object with given params
+        Syntax: create <Class> <param 1> <param 2> <param 3>
+        param syntax: <key_name>=<value>
+        Value syntax: "<value>":=<value>
+        """
+        args = arg.split()
+        if len(args) < 2:
+            print("Usage: create <Class name> <param 1> ..")
+            return
+        class_nm = args[0]
+        if not class_nm:
             print("** class name missing **")
-            return
-        elif args not in HBNBCommand.classes:
+
+        if class_nm not in HBNBCommand.classes:
             print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
-        print(new_instance.id)
-        storage.save()
+
+        try:
+            module = importlib.import_module(f"models.{class_nm.lower()}")
+            class_ = getattr(module, class_nm)
+
+            # Prase parameters and create obj
+            kwargs = {}
+            for i in args[1:]:
+                if '=' in i:
+                    key, val = i.split('=', 1)
+                    if val.startswith("\"") and val.endswith("\""):
+                        # String value
+                        val = val[1:-1].replace('_', ' ').replace('\"', '"')
+                    elif '.' in val:
+                        try:
+                            val = float(val)
+                        except ValueError:
+                            continue
+                    else:
+                        # Integer Value
+                        try:
+                            val = int(val)
+                        except ValueError:
+                            continue
+                    kwargs[key] = val
+            # Create objects with given parameters
+            obj = class_(**kwargs)
+            storage.new(obj)
+            storage.save()
+            print(obj.id)
+        except (ImportError, AttributeError) as e:
+            print(f"Error: {e}")
 
     def help_create(self):
         """ Help information for the create method """
@@ -187,7 +228,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            del(storage.all()[key])
+            del (storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -211,7 +252,7 @@ class HBNBCommand(cmd.Cmd):
                     print_list.append(str(v))
         else:
             for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+                print_list.append(v)
 
         print(print_list)
 
@@ -319,6 +360,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
