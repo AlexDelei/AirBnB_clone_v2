@@ -11,10 +11,11 @@ STORAGE_TYPE = os.environ.get('HBNB_TYPE_STORAGE')
 
 class City(BaseModel):
     """City class handles all application cities"""
-    __tablename__ = 'cities'
-    id = Column(String(60), primary_key=True, nullable=False)
-    name = Column(String(128), nullable=False)
-    state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
+    if STORAGE_TYPE == 'db':
+        __tablename__ = 'cities'
+        id = Column(String(60), primary_key=True, nullable=False)
+        name = Column(String(128), nullable=False)
+        state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
 
 
-states = relationship("State", back_populates='cities')
+state = relationship("State", back_populates='cities')
