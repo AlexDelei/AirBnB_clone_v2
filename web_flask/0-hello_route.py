@@ -4,7 +4,6 @@ A simple demostration of creating a flask web app
 using the the flask framework
 """
 from flask import Flask
-from Flask import app
 
 app = Flask(__name__)
 
@@ -17,7 +16,4 @@ def index():
 
 
 if __name__ == '__main__':
-	"""
-	run host
-	"""
 	app.run(host='0.0.0.0', port=5000)
