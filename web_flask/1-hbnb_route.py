@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-A simple demostration of creating web app
-"""
+"""A simple demostration of creating web app"""
 from flask import Flask
 
 app = Flask(__name__)
@@ -9,16 +7,12 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def index():
-	"""
-	Return hello hbnb
-	"""
+	"""Return hello hbnb"""
 	return 'Hello HBNB!'
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
-	"""
-	Return hbnb
-	"""
+	"""Return hbnb"""
 	return 'HBNB'
 
 
