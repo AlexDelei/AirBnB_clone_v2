@@ -25,7 +25,7 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-
+    reviews = relationship("Review", backref="reviewing", cascade="delete")
     
     if STORAGE_TYPE != 'db':
         city_id = ""
@@ -40,3 +40,21 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
         review_ids = []
+
+        @property
+        def reviews(self):
+            """"
+            returning a list of reviews to self
+            """
+            if len(self.review_ids) > 0:
+                return review_ids
+            else:
+                return None
+
+        @reviews.setter
+        def reviews(self, review_obj):
+            """
+                setter for review_ids
+            """
+            if amenity_obj and amenity_obj not in self.amenity_ids:
+                self.amenity_ids.append(amenity_obj.id)
