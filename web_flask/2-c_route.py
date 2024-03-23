@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """A simple demostration of creating web app"""
 from flask import Flask
-from flask import escape
 
 app = Flask(__name__)
 
@@ -19,7 +18,7 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def routing(text):
 	"""printout the text passed as parameter"""
-	return 'C {}'.format(escape(text.replace('_', ' ')))
+	return 'C {}'.format(text.replace('_', ' '))
 
 
 if __name__ == '__main__':
