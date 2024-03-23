@@ -7,26 +7,29 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def index():
-	"""Return hello hbnb"""
-	return 'Hello HBNB!'
+    """Return hello hbnb"""
+    return 'Hello HBNB!'
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
-	"""Return hbnb"""
-	return 'HBNB'
+    """Return hbnb"""
+    return 'HBNB'
+
 
 @app.route('/c/<text>', strict_slashes=False)
 def routing(text):
-	"""printout the text passed as parameter"""
-	return 'C {}'.format(text.replace('_', ' '))
+    """printout the text passed as parameter"""
+    return 'C {}'.format(text.replace('_', ' '))
+
 
 @app.route('/python/<text>', strict_slashes=False)
 @app.route('/python/', strict_slashes=False)
 def routing_2(text='is_cool'):
-	"""printout the text passed as a url param
-	with default text being is cool"""
-	return 'Python {}'.format(text.replace('_', ' '))
+    """printout the text passed as a url param
+    with default text being is cool"""
+    return 'Python {}'.format(text.replace('_', ' '))
 
 
 if __name__ == '__main__':
-	app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
