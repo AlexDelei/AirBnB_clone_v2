@@ -136,7 +136,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
         try:
-            module = importlib.import_module(f"models.{class_nm.lower()}")
+            module = importlib.import_module("models.{}".format(class_nm.lower()))
             class_ = getattr(module, class_nm)
 
             # Prase parameters and create obj
@@ -165,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
             storage.save()
             print(obj.id)
         except (ImportError, AttributeError) as e:
-            print(f"Error: {e}")
+            print("Error: {}".format(e))
 
     def help_create(self):
         """ Help information for the create method """
