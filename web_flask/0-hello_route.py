@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+A simple demostration of creating a flask web app
+using the the flask framework
+"""
 from flask import Flask
 from Flask import app
 
@@ -6,6 +10,9 @@ app = Flask(__name__)
 
 @app.route('/', strict_slashes=False)
 def index():
+	"""
+	Return hello hbnb
+	"""
 	return "Hello HBNB!"
 
 
