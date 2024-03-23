@@ -30,6 +30,7 @@ def routing_2(text='is_cool'):
     with default text being is cool"""
     return 'Python {}'.format(text.replace('_', ' '))
 
+
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
     """return n if its an integer"""
