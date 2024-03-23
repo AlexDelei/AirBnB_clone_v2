@@ -13,7 +13,7 @@ def index():
 	"""
 	Return hello hbnb
 	"""
-	return "Hello HBNB!"
+	return 'Hello HBNB!'
 
 
 if __name__ == '__main__':
