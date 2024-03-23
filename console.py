@@ -6,7 +6,6 @@ import models
 import importlib
 import os
 from models.base_model import BaseModel
-from models.__init__ import storage
 from models.user import User
 from models.place import Place
 from models.state import State
@@ -161,8 +160,8 @@ class HBNBCommand(cmd.Cmd):
                     kwargs[key] = val
             # Create objects with given parameters
             obj = class_(**kwargs)
-            storage.new(obj)
-            storage.save()
+            models.storage.new(obj)
+            models.storage.save()
             print(obj.id)
         except (ImportError, AttributeError) as e:
             print("Error: {}".format(e))
@@ -241,19 +240,17 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-
-        if args:
+        if len(args) > 0:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in models.storage._FileStorage__objects.items():
                 if k.split('.')[0] == args:
-                    print_list.append(str(v))
-        else:
-            for k, v in storage._FileStorage__objects.items():
+                    print_list.append(v)
+            print(print_list)
+        for k, v in models.storage._FileStorage__objects.items():
                 print_list.append(v)
-
         print(print_list)
 
     def help_all(self):
@@ -364,3 +361,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
+
