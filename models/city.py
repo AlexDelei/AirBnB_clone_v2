@@ -9,13 +9,14 @@ from sqlalchemy.orm import relationship
 STORAGE_TYPE = os.environ.get('HBNB_TYPE_STORAGE')
 
 
-class City(BaseModel):
+class City(BaseModel, Base):
     """City class handles all application cities"""
     if STORAGE_TYPE == 'db':
         __tablename__ = 'cities'
-        id = Column(String(60), primary_key=True, nullable=False)
         name = Column(String(128), nullable=False)
         state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-
-
-state = relationship("State", back_populates='cities')
+        states = relationship("State", back_populates='cities')
+    else:
+        state_id = ''
+        name = ''
+        places = []
