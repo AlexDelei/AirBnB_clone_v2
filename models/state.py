@@ -14,8 +14,20 @@ class State(BaseModel, Base):
     """ State class """
     if STORAGE_TYPE == 'db':
         __tablename__ = 'states'
-        id = Column(String(60), primary_key=True, nullable=False)
         name = Column(String(128), nullable=False)
+        cities = relationship("City", back_populates="states", cascade="delete")
+    else:
+        name = ''
 
-
-cities = relationship("City", back_populates="state", cascade="delete")
+        @property
+        def list_cities(self):
+            """
+            returns a list of Cities which are related
+            to this state
+            """
+            temp = []
+            for city in models.storage.all("City").values():
+                # only instances with the current state id
+                if city.state_id == self.id:
+                    temp.append(city)
+            return temp
