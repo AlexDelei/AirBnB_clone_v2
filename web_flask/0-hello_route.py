@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-A simple demostration of creating a flask web app
-using the the flask framework
+A simple demostration of creating web app
 """
 from flask import Flask
 
