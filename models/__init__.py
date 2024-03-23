@@ -5,5 +5,9 @@ from models.engine.file_storage import FileStorage
 from models.engine import db_storage
 
 
-storage = FileStorage()
+if os.environ.get("HBNB_TYPE_STORAGE") == 'db':
+    storage = db_storage.DBStorage()
+else:
+    storage = FileStorage()
+
 storage.reload()
