@@ -59,12 +59,16 @@ class DBStorage:
             objects
         """
         obj_d = {}
-        if cls is not None:
-            all_query = self.__session.query(DBStorage.CNC[cls])
-            for obj in all_query:
-                obj_ref = "{}.{}".format(type(obj).__name__, obj.id)
-                obj_d[obj_ref] = obj
-            return obj_d
+        if cls:
+              all_query = self.__session.query(cls).all()
+        else:
+            all_query = []
+            for cls_name, cls_model in self.CNC.items():
+                all_query.extend(self.__session.query(cls_model).all())
+        for obj in all_query:
+            obj_ref = "{}.{}".format(type(obj).__name__, obj.id)
+            obj_d[obj_ref] = obj
+        return obj_d
 
     def new(self, obj):
         """
