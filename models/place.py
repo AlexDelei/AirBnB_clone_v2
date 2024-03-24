@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 import os
+import models
 from .base_model import BaseModel
 from sqlalchemy import String
 from sqlalchemy import Integer
@@ -8,9 +9,16 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Float
 from sqlalchemy.orm import relationship
+from sqlalchemy import Table
 from .base_model import Base
 STORAGE_TYPE = os.environ.get('HBNB_TYPE_STORAGE')
 
+
+place_amenity = Table(
+     'place_amenity', Base.metadata,
+     Column('place_id', String(60), ForeignKey('places.id'), primary_key=True, nullable=False),
+     Column('amenity_id', String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+)
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -26,6 +34,7 @@ class Place(BaseModel, Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     reviews = relationship("Review", backref="reviewing", cascade="delete")
+    amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     
     if STORAGE_TYPE != 'db':
         city_id = ""
@@ -58,3 +67,18 @@ class Place(BaseModel, Base):
             """
             if amenity_obj and amenity_obj not in self.amenity_ids:
                 self.amenity_ids.append(amenity_obj.id)
+
+        @property
+        def amenities(self):
+            """Getter attribute for amenities"""
+            amenity_objs = []
+            for amenity_id in self.amenity_ids:
+                amenity_objs.append(models.storage.all(Amenity).get(amenity_id))
+            return amenity_objs
+
+        @amenities.setter
+        def amenities(self, obj):
+            """Setter attribute for amenities"""
+            if isinstance(obj, Amenity):
+                if obj.id not in self.amenity_ids:
+                    self.amenity_ids.append(obj.id)
