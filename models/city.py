@@ -20,5 +20,6 @@ class City(BaseModel, Base):
         name = ''
         places = []
 
+
 places = relationship('Place', backref='cities', cascade='delete')
 states = relationship("State", back_populates='cities')
