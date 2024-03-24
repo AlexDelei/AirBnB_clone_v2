@@ -14,10 +14,11 @@ class City(BaseModel, Base):
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-    places = relationship('Place', backref='cities', cascade='delete')
-    states = relationship("State", back_populates='cities')
 
     if STORAGE_TYPE != "db":
         state_id = ''
         name = ''
         places = []
+
+places = relationship('Place', backref='cities', cascade='delete')
+states = relationship("State", back_populates='cities')

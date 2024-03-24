@@ -33,7 +33,6 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, nullable=False, default=0)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    reviews = relationship("Review", backref="reviewing", cascade="delete")
     amenities = relationship("Amenity", secondary=place_amenity, viewonly=False)
     
     if STORAGE_TYPE != 'db':
@@ -82,3 +81,7 @@ class Place(BaseModel, Base):
             if isinstance(obj, Amenity):
                 if obj.id not in self.amenity_ids:
                     self.amenity_ids.append(obj.id)
+
+
+reviews = relationship("Review", backref="reviewing", cascade="delete")
+user = relationship("User", backref="places")
