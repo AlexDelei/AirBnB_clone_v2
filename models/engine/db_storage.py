@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+!/usr/bin/python3
 """
 Database Storage
 """
@@ -60,7 +60,7 @@ class DBStorage:
         """
         obj_d = {}
         if cls:
-              all_query = self.__session.query(cls).all()
+            all_query = self.__session.query(cls).all()
         else:
             all_query = []
             for cls_name, cls_model in self.CNC.items():
