@@ -8,17 +8,16 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.teardown_appcontext
-def teardown_db(exception):
-    """"Remove the current sqlalchemy session"""
-    storage.close()
-
-
 @app.route('/states_list', strict_slashes=False)
 def states_list():
     """Listing all the states on a webpage"""
     st = sorted(storage.all(models.state.State).values(), key=lambda s: s.name)
     return render_template("7-states_list.html", states=st)
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """"Remove the current sqlalchemy session"""
+    storage.close()
 
 
 if __name__ == '__main__':
