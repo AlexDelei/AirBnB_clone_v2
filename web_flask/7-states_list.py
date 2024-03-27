@@ -14,6 +14,7 @@ def states_list():
     st = sorted(storage.all(models.state.State).values(), key=lambda s: s.name)
     return render_template("7-states_list.html", states=st)
 
+
 @app.teardown_appcontext
 def teardown_db(exception):
     """"Remove the current sqlalchemy session"""
