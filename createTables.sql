@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS cities (
         updated_at DATETIME NOT NULL,
         name VARCHAR(128) NOT NULL,
         state_id VARCHAR(60) NOT NULL,
-        FOREIGN KEY (state_id) REFERENCES states(id)
+        FOREIGN KEY (state_id) REFERENCES states(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS users (
